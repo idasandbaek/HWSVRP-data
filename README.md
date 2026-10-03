@@ -83,11 +83,7 @@ Each test instance is defined by three components:
 2. A **weather scenario**.
 3. An **emission reduction target**, represented by the parameter $\alpha$.
 
-For each instance group, test instances are generated using the first **4, 6, 8, ..., 22** order locations in the group, as well as an instance containing **all 23 order locations**. 
-
-If an order location has an associated charging location, the corresponding charging location is also included in the instance.
-
-For example, when the first four order locations of an instance group are selected, the order locations are **GFA, TRC, ISW, and TRA**. Any charging locations associated with these installations are included as well.
+For each instance group, test instances are generated using the first **4, 6, 8, ..., 22** order locations in the group, as well as an instance containing **all 23 order locations**.  If an order location has an associated charging location, the corresponding charging location is also included in the instance. 
 
 Three weather scenarios are considered: **Good, Medium, and Severe**. The scenarios are derived from historical weather data and are defined by a starting hour relative to **1 January 2020**:
 
@@ -110,7 +106,6 @@ The parameter $\alpha$ specifies the allowed fraction of the reference emissions
 Each instance is uniquely identified by its instance group, number of order locations, weather scenario, and $\alpha$ value.
 
 The complete test set contains **451 instances**.
-
 
 
 | Row | Random 1 | Random 2 | Random 3 | Random 4 | Random 5 |
