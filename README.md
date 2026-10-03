@@ -6,42 +6,74 @@ This repository contains the input data, test instances and results for the Hybr
 
 | File | Description |
 | --- | --- |
-| `Data.txt` | Main instance definition in Python dictionary format. Includes locations with orders, charging locations, service times, coordinates, charging stations, vessel parameters, and routing constraints. |
+| `Data.txt` | Includes locations with orders, charging locations, service times, coordinates, paired locations and vessel parameters. |
 | `Distance_matrix.txt` | Distance matrix for the locations. |
-| `HYBRID_ShipPowerCurves.xml` | Three years of weather data from January 1st 2020 for an area in the North Sea. |
-| `HYBRID_wavedata.nc` | Wave-condition dataset used to estimate environmental effects on vessel performance. |
+| `HYBRID_ShipPowerCurves.xml` | Power curves for a generic PSV under different weather states |
+| `HYBRID_wavedata.nc` | Three years of weather data from January 1st 2020 for an area in the North Sea. |
 | `Installation_data.xlsx` | Installation-related data and supporting operational inputs. |
-| `Results.xlsx` | Output results or solution summaries from the optimization process. |
+| `Results.xlsx` | Results for running the different solution methods on the test instances. |
 
 ## Main data summary
 
-The current data in `Data.txt` includes:
+### Structure of `Data.txt`
 
-- A set of order and charging locations
-- Coordinates for each location
-- Service times `T_S` and opening hours
-- Charging stations `locations_charging`
-- Vessel parameters such as capacity, speed, and battery-related settings
-- Routing parameters including depot, return time, preparation time, and time-step size
+`Data.txt` is a Python dictionary-style input file that defines the full routing instance. The main blocks are:
+
+- `locations_orders`: the set of order locations used in the instances. Each key is a location ID and the corresponding value stores the operational data for that node.
+- `T_S`: service time at each location in time steps. For charging nodes, the service time is set to `0`.
+- `locations_coordinates`: geographic coordinates for every location ID, including the depot and charging locations.
+- `locations_charging`: charging locations and the maximum possible energy charged during service under still water conditions.
+- `pairs`: the paired order/charging locations that share the same physical location, such as `(4,5)` for `GFA` and `(23,24)` for `TRA`.
+- Global parameters such as `o`, `d`, `t_ret`, `t_prep`, `delta_t`, `E`, and `start_hour` define the parameter settings used for the instances.
+
+### Location ID to name mapping
+
+The internal IDs are mapped to location names as follows. Note that some IDs share the same physical site, which is why values such as `(4,5)` or `(23,24)` appear together.
+
+| ID(s) | Location | Notes |
+| --- | --- | --- |
+| 0, 31 | MONG | Depot / start and return node |
+| 1 | APT | Order location |
+| 2 | ASL | Order location |
+| 3 | DSS | Order location |
+| 4, 5 | GFA | Charging location at 5 |
+| 6 | GFB | Order location |
+| 7 | GFC | Order location |
+| 8 | KVB | Order location |
+| 9, 10 | MLA | Charging location at 10 |
+| 11 | MLB | Order location |
+| 12 | NLN | Order location |
+| 13 | OSC | Order location |
+| 14, 15 | OSE | Charging location  at 15 |
+| 16 | OSO | Order location |
+| 17 | OSS | Order location |
+| 18 | STA | Order location |
+| 19 | STB | Order location |
+| 20 | STC | Order location |
+| 21 | TRB | Order location |
+| 22 | TRC | Order location |
+| 23, 24 | TRA | Charging location at 24 |
+| 25 | VAL | Order location |
+| 26 | CPR | Order location |
+| 27 | ISW | Order location |
+| 28 | WM1 | Charging location |
+| 29 | WM2 | Charging location  |
+| 30 | WM3 | Charging location  |
 
 ### Example parameters from the dataset
 
 - Depot / origin: `o = 0`
 - Destination / end node: `d = 31`
-- Planning horizon / return time: `t_ret = 180`
-- Preparation time: `t_prep = 34`
-- Time step: `delta_t = 0.25`
-- Energy consumption during servicing and charging (still water) `E = 125`
+- Planning horizon / return time (in time steps): `t_ret = 180`
+- Preparation time (in time steps): `t_prep = 34`
+- Time step (in hours): `delta_t = 0.25`
+- Energy consumption (kWh) during servicing and charging (still water conditions): `E = 125`
 - Weather scenario: `start_hour = 1080`
-- Electricity and fuel coefficients:
+- Electricity and fuel costs:
   - `C_E = 1.75`
   - `C_F = 1.2`
 
-The pairs of locations represents the order location and the associated charging location. 
-
-
-
-### Test Instance Generation
+## Test Instance Generation
 
 A total of **451 test instances** were generated to evaluate and compare the solution methods. The instances are constructed from **five instance groups**, as shown in the table below.
 
